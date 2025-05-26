@@ -1,0 +1,8 @@
+App/models
+App/uploaded_files
+App/outputs
+Resource
+.venv
+logs
+.dockerignore
+.idea
