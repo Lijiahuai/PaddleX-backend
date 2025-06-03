@@ -11,22 +11,15 @@ def texts_compare():
     try:
         data = request.get_json()
         paths = data['paths']
-        current_app.logger_custom.debug(f"文本比较路径列表: {paths}")
+        api_key = data.get('apiKey')
+        base_url = data.get('baseUrl')
+        text_service.ensure_key(api_key, base_url)  # 设置首次使用的 key
 
         results = text_service.compare_documents(paths)
-        current_app.logger_custom.info(f"/text/compare 处理完成，返回 {len(results)} 条结果")
-
-        return jsonify({
-            "status": "success",
-            "data": results
-        }), 200
-
+        return jsonify({"status": "success", "data": results}), 200
     except Exception as e:
         current_app.logger_custom.error(f"/text/compare 处理失败: {str(e)}", exc_info=True)
-        return jsonify({
-            "status": "failed",
-            "error": f"处理异常: {str(e)}"
-        }), 500
+        return jsonify({"status": "failed", "error": f"处理异常: {str(e)}"}), 500
 
 
 @text_bp.route('/extract', methods=['POST'])
@@ -35,19 +28,12 @@ def texts_extract():
     try:
         data = request.get_json()
         paths = data['paths']
-        current_app.logger_custom.debug(f"文本提取文件ID列表: {paths}")
+        api_key = data.get('apiKey')
+        base_url = data.get('baseUrl')
+        text_service.ensure_key(api_key, base_url)  # 🔐 设置首次使用的 key
 
         results = text_service.extract_contract_info(paths)
-        current_app.logger_custom.info(f"/text/extract 处理完成，返回 {len(results)} 条结果")
-
-        return jsonify({
-            "status": "success",
-            "data": results
-        }), 200
-
+        return jsonify({"status": "success", "data": results}), 200
     except Exception as e:
         current_app.logger_custom.error(f"/text/extract 处理失败: {str(e)}", exc_info=True)
-        return jsonify({
-            "status": "failed",
-            "error": f"处理异常: {str(e)}"
-        }), 500
+        return jsonify({"status": "failed", "error": f"处理异常: {str(e)}"}), 500

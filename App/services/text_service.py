@@ -10,8 +10,11 @@ from flask import current_app
 class TextService:
     def __init__(self):
         """初始化文本服务类"""
-        self.api_key = "sk-5ee6f8fa40224f1f97de2f5afaf145d8"
-        self.base_url = "https://api.deepseek.com"
+        # self.api_key = "sk-5ee6f8fa40224f1f97de2f5afaf145d8"
+        # self.base_url = "https://api.deepseek.com"
+
+        self.api_key = None
+        self.base_url = None
         # 专业合同版本比对提示词
         self.prompt_templates = {
             "contract_version_diff": {
@@ -132,6 +135,12 @@ class TextService:
                     2. 建议补充材料：[...]"""
             }
         }
+
+    def ensure_key(self, api_key: str, base_url: str):
+        if not self.api_key:
+            self.api_key = api_key
+        if not self.base_url:
+            self.base_url = base_url
 
     def _extract_text(self, file_path: str) -> Optional[str]:
         """通用文本提取方法"""
